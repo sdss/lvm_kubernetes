@@ -53,16 +53,29 @@ spec:
   selector:
     k8s-app: rabbitmq
   ports:
-    - name: 'api'
-      protocol: TCP
-      port: 5672
-      targetPort: 5672
     - name: 'management'
       protocol: TCP
       port: 15672
       targetPort: 15672
+    - name: 'api'
+      protocol: TCP
+      port: 5672
+      targetPort: 5672
   type: LoadBalancer
-status:
-  loadBalancer:
-    ingress:
-      - ip: 10.8.38.21
+  loadBalancerIP: lvm-hub.lco.cl
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-clusterip
+  namespace: lvm-services
+spec:
+  selector:
+    k8s-app: rabbitmq
+  ports:
+    - name: 'api'
+      protocol: TCP
+      port: 5672
+      targetPort: 5672
+  type: ClusterIP

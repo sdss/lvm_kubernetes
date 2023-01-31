@@ -21,7 +21,7 @@ spec:
           image: ghcr.io/sdss/lvmscp:rabbitmq-host
           env:
             - name: RABBITMQ_HOST
-              value: '10.42.0.24'
+              value: 'rabbitmq-clusterip.lvm-services'
             - name: RABBITMQ_PORT
               value: '5672'
           imagePullPolicy: Always
