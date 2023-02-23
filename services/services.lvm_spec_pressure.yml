@@ -1,0 +1,41 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: lvm-spec-pressure-sp1
+  namespace: lvm-services
+  labels:
+    k8s-app: lvm-spec-pressure-sp1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: lvm-spec-pressure-sp1
+  template:
+    metadata:
+      name: lvm-spec-pressure-sp1
+      labels:
+        k8s-app: lvm-spec-pressure-sp1
+    spec:
+      hostNetwork: true
+      containers:
+        - name: lvm-spec-pressure-sp1
+          image: ghcr.io/albireox/lvm_spec_pressure:latest
+          env:
+            - name: SPEC
+              value: 'sp1'
+          imagePullPolicy: Always
+          securityContext:
+            privileged: false
+      nodeName: lvm-pi-spec1
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
