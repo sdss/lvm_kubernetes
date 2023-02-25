@@ -1,0 +1,42 @@
+# kubectl create -f to import
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: "2022-06-08T14:35:32Z"
+  labels:
+    app: lvm-scp
+  name: lvm-scp
+spec:
+  terminationGracePeriodSeconds: 3
+  containers:
+  - name: lvm-scp
+    image: ghcr.io/sdss/lvmactor:latest
+    securityContext:
+      capabilities: {}
+    volumeMounts:
+    - mountPath: /root/lvmscp
+      name: data-lvm-host-1
+    - mountPath: /data
+      name: data-lvm-host-2
+    env:
+    - name: LVM_ACTOR
+      value: "lvmscp"
+    - name: LVM_DEBUG
+      value: "yes"
+    - name: LVM_ACTOR_ARGS
+      value: "--rmq_url=amqp://guest:guest@192.168.49.2:5672/"
+
+  volumes:
+  - name: data-lvm-host-1
+    hostPath:
+      path: /lvm/lvmscp
+      type: Directory
+  - hostPath:
+      path: /lvm/var/data
+      type: Directory
+    name: data-lvm-host-2
+
+
+
+    

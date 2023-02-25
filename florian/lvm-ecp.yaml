@@ -1,0 +1,34 @@
+# kubectl create -f to import
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: "2022-06-08T14:35:32Z"
+  labels:
+    app: lvm-ecp
+  name: lvm-ecp
+spec:
+  terminationGracePeriodSeconds: 0
+  containers:
+  - name: lvm-ecp
+    image: ghcr.io/sdss/lvmactor:latest
+    securityContext:
+      capabilities: {}
+    volumeMounts:
+    - mountPath: /root/lvmecp
+      name: data-lvm-host-1
+    env:
+    - name: LVM_ACTOR
+      value: "lvmecp"
+    - name: LVM_ACTOR_ARGS
+      value: "--verbose --rmq_url=amqp://guest:guest@192.168.49.2:5672/"
+    - name: LVM_DEBUG
+      value: "yes"
+  volumes:
+  - name: data-lvm-host-1
+    hostPath:
+      path: /lvm/lvmecp
+      type: Directory
+
+
+    
