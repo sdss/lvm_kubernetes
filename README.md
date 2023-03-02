@@ -56,7 +56,7 @@ Run
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
 ```
 
-to install the dashboard. Then create a file `~/dashboard.admin-user.yml` with contents
+to install the dashboard. Then create a file `~/admin-user.yml` with contents
 
 ```yaml
 apiVersion: v1
@@ -81,7 +81,7 @@ subjects:
   namespace: kubernetes-dashboard
 ```
 
-Apply the file with `sudo k3s kubectl apply -f ./dashboard.admin-user.yml`. Create a bearer token with `sudo k3s kubectl -n kubernetes-dashboard create token admin-user`.
+Apply the file with `sudo k3s kubectl apply -f ./admin-user.yml`. Create a bearer token with `sudo k3s kubectl -n kubernetes-dashboard create token admin-user`.
 
 You can create the token with `--duration=87600h` to prevent the token expiring.
 

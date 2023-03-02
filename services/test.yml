@@ -1,0 +1,13 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: test
+  namespace: lvm-services
+spec:
+  hostNetwork: true
+  containers:
+    - name: test-container
+      image: debian
+      command: ['tail']
+      args: ['-f', '/dev/null']
+  restartPolicy: OnFailure

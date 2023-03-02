@@ -25,6 +25,10 @@ spec:
             - name: RABBITMQ_PORT
               value: '5672'
           imagePullPolicy: Always
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: 500m
           securityContext:
             privileged: false
           volumeMounts:

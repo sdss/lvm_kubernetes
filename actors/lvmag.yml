@@ -1,0 +1,67 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: lvm-skye-ag
+  namespace: lvm-actors
+  labels:
+    k8s-app: lvm-skye-ag
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: lvm-skye-ag
+  template:
+    metadata:
+      name: lvm-skye-ag
+      labels:
+        k8s-app: lvm-skye-ag
+    spec:
+      containers:
+        - name: lvm-skye-agcam
+          image: ghcr.io/sdss/lvmcam:gallegoj
+          env:
+            - name: LVM_ACTOR
+              value: lvmcam
+            - name: LVM_CAM_TYPE
+              value: araviscam
+            - name: LVM_ACTOR_CONFIG
+              value: lvm.skye.agcam
+            - name: LVM_ACTOR_ARGS
+              value: --rmq_url=amqp://guest:guest@10.8.38.21:5672/ --verbose
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: 500m
+          securityContext:
+            privileged: false
+          volumeMounts:
+            - name: data-volume
+              mountPath: /data
+        - name: lvm-skye-agp
+          image: ghcr.io/sdss/lvmagp:gallegoj
+          env:
+            - name: LVM_ACTOR
+              value: lvmagp
+            - name: LVM_ACTOR_CONFIG
+              value: lvm.skye.agp
+            - name: LVM_ACTOR_ARGS
+              value: --rmq_url=amqp://guest:guest@10.8.38.21:5672/ --verbose
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: 500m
+          securityContext:
+            privileged: false
+          volumeMounts:
+            - name: data-volume
+              mountPath: /data
+      volumes:
+        - name: data-volume
+          hostPath:
+            path: /data
+      hostNetwork: true
+      nodeName: lvm-hub
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 0
